@@ -180,8 +180,8 @@ public class GUIView extends JFrame {
 						"Enter the title of the book you want to mark as read: ");
 				String author = JOptionPane.showInputDialog(GUIView.this,
 						"Enter the author of the book you want to mark as read: ");
-				int completed = model.setToRead(title, author);
-				if (completed == 1) {
+				boolean completed = model.setToRead(title, author);
+				if (completed) {
 					instructionLabel.setText(title + " by " + author + " has been marked as read.");
 				} else {
 					instructionLabel.setText(title + " by " + author + " does not exist in your library.");

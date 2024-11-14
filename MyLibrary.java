@@ -96,8 +96,8 @@ public class MyLibrary {
 				String title = keyboard.nextLine();
 				System.out.println("Enter the author of the book you want to mark as read: ");
 				String author = keyboard.nextLine();
-				int completed = mainLibrary.setToRead(title, author);
-				if (completed == 1) {
+				boolean completed = mainLibrary.setToRead(title, author);
+				if (completed) {
 					System.out.println(title + " by " + author + " has been marked as read!");
 				}
 				else {

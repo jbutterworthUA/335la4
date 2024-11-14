@@ -101,10 +101,9 @@ class libraryTest {
 	
 	@Test
 	void addBookTest() {
-		myList.addBook("The Jason Book", "Jason");
-		myList.addBook("The Dylan Book", "Dylan");
-		myList.addBook("The Dylan Book", "Dylan");
-		System.out.println(myList.size());
+		assertTrue(myList.addBook("The Jason Book", "Jason"));
+		assertTrue(myList.addBook("The Dylan Book", "Dylan"));
+		assertFalse(myList.addBook("The Dylan Book", "Dylan"));
 	}
 	
 	@Test
@@ -122,6 +121,24 @@ class libraryTest {
 		myList.addBook("The Dylan Book", "Dylan");
 		assertEquals(myList.get(0).getBook().getTitle(), "The Jason Book");
 		assertEquals(myList.get(0).getBook().getAuthor(), "Jason");
+	}
+	
+	@Test
+	void masterListSortingTest() {
+		myList.addBook("a", "z");
+		myList.addBook("b", "y");
+		myList.addBook("c", "x");
+		myList.addBook("d", "w");
+		myList.addBook("d", "w");
+		myList.addBook("e", "v");
+		myList.sortAuthor();
+		assertEquals("e", myList.get(0).getBook().getTitle());
+		assertEquals("d", myList.get(1).getBook().getTitle());
+		assertEquals("a", myList.get(4).getBook().getTitle());
+		myList.sortTitle();
+		assertEquals("z", myList.get(0).getBook().getAuthor());
+		assertEquals("y", myList.get(1).getBook().getAuthor());
+		assertEquals("v", myList.get(4).getBook().getAuthor());
 	}
 	
 	
@@ -154,5 +171,97 @@ class libraryTest {
 		myRatedList.addReviewBook(jasonBookReview);
 		myRatedList.addReviewBook(dylanBookReview);
 		assertEquals(myRatedList.get(1), dylanBookReview);
+	}
+	
+	
+	private LibrarySetup setup = new LibrarySetup();
+	
+	@Test
+	void setupAddBooksTest() {
+		assertFalse(setup.addBooks("fakeName.txt"));
+		assertTrue(setup.addBooks("/Users/dylancarothers/Desktop/School Stuff/CSC 335/LA2/335la2/books.txt"));
+	}
+	
+	@Test
+	void setupAddBookTest() {
+		assertTrue(setup.addBook("title1", "author1"));
+		assertTrue(setup.addBook("title2", "author2"));
+		assertFalse(setup.addBook("title2", "author2"));
+		assertTrue(setup.addBook("title3", "author3"));
+		assertTrue(setup.addBook("title1", "author2"));
+		assertTrue(setup.addBook("title2", "author1"));
+	}
+	
+	@Test
+	void setupGetBooksTest() {
+		setup.addBook("title1", "author3");
+		setup.addBook("title2", "author2");
+		setup.addBook("title3", "author1");
+		assertTrue(setup.setToRead("title2", "author2"));
+		MasterList masterList = setup.getBooks("author");
+		assertEquals(masterList.get(0).getBook().getTitle(), "title3");
+		masterList = setup.getBooks("title");
+		assertEquals(masterList.get(0).getBook().getAuthor(), "author3");
+		masterList = setup.getBooks("read");
+	//	assertEquals(masterList.get(0).getBook().getTitle(), "title2");
+//		assertEquals(masterList.size(), 1);
+		masterList = setup.getBooks("unread");
+		assertEquals(masterList.get(0).getBook().getTitle(), "title1");
+		assertEquals(masterList.get(1).getBook().getTitle(), "title3");
+		assertEquals(masterList.size(), 2);
+		masterList = setup.getBooks("fakeSearch");
+		assertEquals(masterList, null);
+	}
+	
+	@Test
+	void setupSuggestTest() {
+		setup.addBook("title1", "author3");
+		setup.addBook("title2", "author2");
+		setup.setToRead("title2", "author2");
+		assertEquals(setup.suggestRead().getTitle(), "title1");
+		setup.setToRead("title1", "author3");
+		assertEquals(setup.suggestRead(), null);
+	}
+	
+	@Test
+	void setupSearchTest() {
+		setup.addBook("title1", "author3");
+		setup.addBook("title2", "author2");
+		setup.addBook("title3", "author1");
+		setup.rate("title1", "author3", 1);
+		setup.rate("title2", "author2", 2);
+		setup.rate("title3", "author1", 3);
+		assertEquals(setup.search("title", "title3", 10000).get(0).getBook().getAuthor(), "author1");
+		assertEquals(setup.search("author", "author1", 10000).get(0).getBook().getTitle(), "title3");
+		assertEquals(setup.search("rate", "fakeValue", 2).get(0).getBook().getTitle(), "title2");
+		assertEquals(setup.search("invalidSearch", "title3", 10000).size(), 0);
+	}
+	
+	@Test
+	void setupRateTest() {
+		setup.addBook("title1", "author3");
+		setup.addBook("title2", "author2");
+		setup.addBook("title3", "author1");
+		assertTrue(setup.rate("title1", "author3", 1));
+		assertTrue(setup.rate("title2", "author2", 2));
+		assertTrue(setup.rate("title3", "author1", 3));
+		assertTrue(setup.rate("title1", "author3", 5));
+		assertTrue(setup.rate("title2", "author2", 4));
+		assertTrue(setup.rate("title3", "author1", 3));
+		assertFalse(setup.rate("title4", "author4", 3));
+		assertFalse(setup.rate("title1", "author4", 3));
+		assertFalse(setup.rate("title4", "author3", 3));
+	}
+	
+	@Test
+	void setupSetToReadTest() {
+		setup.addBook("title1", "author3");
+		setup.addBook("title2", "author2");
+		setup.addBook("title3", "author1");
+		assertTrue(setup.setToRead("title1", "author3"));
+		assertTrue(setup.setToRead("title2", "author2"));
+		assertTrue(setup.setToRead("title3", "author1"));
+		assertFalse(setup.setToRead("title1", "author2"));
+		assertFalse(setup.setToRead("title2", "author3"));
 	}
 }

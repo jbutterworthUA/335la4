@@ -26,15 +26,14 @@ public class LibrarySetup {
     /**
      * Given a txt file from the user, add all books within that file to the masterList.
      */
-	public void addBooks(String fileName) {
+	public boolean addBooks(String fileName) {
 		Scanner inFile = null;
 		try {
 			// Create file if possible.
 			inFile = new Scanner(new File(fileName));
 		} catch (Exception e) {
 			// Otherwise, alert user that file was not found.
-			System.out.println(fileName + " not found.");
-			System.exit(1);
+			return false;
 		}
 
 		// Skip the first line of the file.
@@ -47,13 +46,14 @@ public class LibrarySetup {
 			String author = lineArray[1];
 			masterList.addBook(title, author);
 		}
+		return true;
 	}
 
     /**
      * Given a title and author from the user, add a new book to the masterList.
      */
-	public void addBook(String title, String author) {
-		masterList.addBook(title, author);
+	public boolean addBook(String title, String author) {
+		return masterList.addBook(title, author);
 	}
 
     /**
@@ -243,7 +243,7 @@ public class LibrarySetup {
     /**
      * Set/update rating of a book in the user's library.
      */
-	public void rate(String searchTitle, String searchAuthor, int newRate) {
+	public boolean rate(String searchTitle, String searchAuthor, int newRate) {
         
         // Integer to keep track of if we have completed the rating process.
         int found = 0;
@@ -257,8 +257,7 @@ public class LibrarySetup {
                 // Mark that we have found the book.
                 found = 1;
                 ratedList.get(i).setRate(newRate);
-                System.out.println("Rate has been updated.");
-                return;
+                return true;
             }
         }
 
@@ -275,14 +274,11 @@ public class LibrarySetup {
                     found = 1;
                     BookReview newReview = new BookReview(currentBookRead, newRate);
                     ratedList.addReviewBook(newReview);
-                    System.out.println("Rate has been updated.");
-                    return;
+                    return true;
                 }
             }
         }
-
-        // If we reach this point, user did not enter a valid book in the library.
-        System.out.println("The book you wish to update was not located in your library.");
+        return false;
 	}
 
     /**

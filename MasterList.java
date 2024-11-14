@@ -48,18 +48,27 @@ public class MasterList {
 	 * through text file. Identical logic to addBooks(), without needing to loop
 	 * through a file.
 	 */
-	public void addBook(String title, String author) {
+	public boolean addBook(String title, String author) {
 		
 		// BookRead object will be created by creating Book object in its parameter.
 		// Allows us to work backwards to smallest class component in program.
 		BookRead currentBook = new BookRead(new Book(title, author));
+		
+		boolean notDuplicate = true;
+		
+		for (int i = 0; i < allBooks.size(); i++) {
+			if (allBooks.get(i).getBook().getTitle().equals(title)) {
+				if (allBooks.get(i).getBook().getAuthor().equals(author)) {
+					notDuplicate = false;
+				}
+			}
+		}
 
 		// Add book to library only if it is not currently included.
-		if (!allBooks.contains(currentBook)) {
+		if (notDuplicate) {
 			allBooks.add(currentBook);
-		} else {
-			System.out.println(currentBook + " already in library.");
-		}
+		} 
+		return notDuplicate;
 	}
 		
 	public void sortTitle() {

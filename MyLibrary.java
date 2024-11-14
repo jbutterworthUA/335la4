@@ -83,8 +83,12 @@ public class MyLibrary {
 				String title = keyboard.nextLine();
 				System.out.println("Enter the author of the book to be added:");
 				String author = keyboard.nextLine();
-				mainLibrary.addBook(title, author);
-				System.out.println(title + " by " + author + " has been added to your library.");
+				boolean added = mainLibrary.addBook(title, author);
+				if (added) {
+					System.out.println(title + " by " + author + " has been added to your library.");
+				} else {
+					System.out.println(title + " by " + author + " already in library.");
+				}
 			} 
 			else if (input.equals("setToRead")) {
 				// Ask the user which book they want to mark as read.
@@ -113,8 +117,12 @@ public class MyLibrary {
             		System.out.println("Please enter a valid book rating (1 - 5): ");
             		newRate = keyboard.nextInt();
         		}
-				mainLibrary.rate(searchTitle, searchAuthor, newRate);
-				System.out.println("The rate of " + searchTitle + " by " + searchAuthor + " has been updated!");
+				boolean found = mainLibrary.rate(searchTitle, searchAuthor, newRate);
+				if (found) {
+					System.out.println("The rate of " + searchTitle + " by " + searchAuthor + " has been updated!");
+				} else {
+					System.out.println(searchTitle + " by " + searchAuthor + " not found!");
+				}
 			} 
 
 			else if (input.equals("getBooks")) {
@@ -154,8 +162,12 @@ public class MyLibrary {
 				// Prompt user for name of text file.
 				System.out.println("Enter the name of the text file:\n");
 				String fileName = keyboard.nextLine();
-				mainLibrary.addBooks(fileName);
-				System.out.println("The contents from " + fileName + " have been added to your library.");
+				boolean found = mainLibrary.addBooks(fileName);
+				if (found) {
+					System.out.println("The contents from " + fileName + " have been added to your library.");
+				} else {
+					System.out.println(fileName + " not found.");
+				}
 			} 
 
 			else if (input.equals("exit")) {

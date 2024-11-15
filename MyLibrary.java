@@ -70,6 +70,7 @@ public class MyLibrary {
 						System.out.println("Enter the " + searchMethod + " of the book you are looking for. (1 - 5)");
 						searchRate = keyboard.nextInt();
 					}
+					keyboard.nextLine();
 					ArrayList<BookRead> possibleBooks = mainLibrary.search(searchMethod, "", searchRate);
 					displayBooks(possibleBooks);
 				}
@@ -117,6 +118,7 @@ public class MyLibrary {
             		System.out.println("Please enter a valid book rating (1 - 5): ");
             		newRate = keyboard.nextInt();
         		}
+        		keyboard.nextLine();
 				boolean found = mainLibrary.rate(searchTitle, searchAuthor, newRate);
 				if (found) {
 					System.out.println("The rate of " + searchTitle + " by " + searchAuthor + " has been updated!");

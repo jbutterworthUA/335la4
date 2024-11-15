@@ -179,7 +179,7 @@ class libraryTest {
 	@Test
 	void setupAddBooksTest() {
 		assertFalse(setup.addBooks("fakeName.txt"));
-		assertTrue(setup.addBooks("/Users/dylancarothers/Desktop/School Stuff/CSC 335/LA2/335la2/books.txt"));
+		assertTrue(setup.addBooks("/Users/dylancarothers/335Workspace/books.txt"));
 	}
 	
 	@Test
